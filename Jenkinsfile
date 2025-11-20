@@ -1,6 +1,8 @@
 pipeline {
     agent any 
-
+    tools {
+        nodejs 'Node_18' 
+    }
     environment {
         // Шлях до папки 'cargo' на вашому робочому комп'ютері
         DELIVERY_PATH = '/path/to/your/cargo/folder' // ЗАМІНІТЬ ЦЕЙ ШЛЯХ
