@@ -1,0 +1,52 @@
+name: Node.js CI
+
+# Коли запускати workflow
+on:
+  push:
+    branches: [ "master" ] # Запускати при коміті в гілку master
+  pull_request:
+    branches: [ "master" ] # Запускати при створенні Pull Request в master
+
+# Визначення завдань (Jobs)
+jobs:
+  build_and_test:
+    # Середовище, на якому буде виконуватися завдання
+    runs-on: ubuntu-latest
+
+    # Використовувана версія Node.js
+    strategy:
+      matrix:
+        node-version: [18.x] 
+
+    steps:
+    - name: Checkout Code
+      # Action для завантаження коду з репозиторію на runner
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      # Action для встановлення необхідної версії Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm' # Кешування залежностей для прискорення
+
+    - name: Install Dependencies
+      # Етап "Збирання" (у Node.js це встановлення залежностей)
+      run: npm install
+
+    - name: Run Tests
+      # Етап "Тестування"
+      run: npm test
+      
+    # Додатковий етап (CD): Доставка/Артефакт
+    - name: Archive Build Artifact
+      # Створення артефакту, щоб його можна було завантажити
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-artifact
+        # Файли, які потрібно запакувати (виключаємо node_modules)
+        path: |
+          **/*.js
+          package.json
+          package-lock.json
+          !node_modules/
