@@ -5,7 +5,7 @@ pipeline {
     }
     environment {
         // Шлях до папки 'cargo' на вашому робочому комп'ютері
-        DELIVERY_PATH = '/path/to/your/cargo/folder' // ЗАМІНІТЬ ЦЕЙ ШЛЯХ
+        DELIVERY_PATH = '/tmp/cargo_delivery' 
         PROJECT_NAME = 'my-simple-project'
     }
 
@@ -28,13 +28,15 @@ pipeline {
 
         stage('Delivery') {
             steps {
-                echo "Starting the Delivery stage to ${env.DELIVERY_PATH}..."
-                sh "tar -czvf ${PROJECT_NAME}.tar.gz ."
-                
-                sh "mkdir -p ${env.DELIVERY_PATH}/${PROJECT_NAME}/"
-                sh "cp ${PROJECT_NAME}.tar.gz ${env.DELIVERY_PATH}/${PROJECT_NAME}/"
-                
-                echo "Artifact delivered to: ${env.DELIVERY_PATH}/${PROJECT_NAME}/"
+            echo "Starting the Delivery stage to ${env.DELIVERY_PATH}..."
+
+            sh "tar -czvf ${PROJECT_NAME}.tar.gz --exclude='./.git' --exclude='./node_modules' ."
+            
+            sh "mkdir -p ${env.DELIVERY_PATH}/${PROJECT_NAME}/"
+            
+            sh "cp ${PROJECT_NAME}.tar.gz ${env.DELIVERY_PATH}/${PROJECT_NAME}/"
+            
+            echo "Artifact delivered to: ${env.DELIVERY_PATH}/${PROJECT_NAME}/"
             }
         }
     }
