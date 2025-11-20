@@ -1,0 +1,17 @@
+{
+  "name": "jenkins-lab-project",
+  "version": "1.0.0",
+  "description": "Minimal project for CI/CD lab 7.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js" 
+  },
+  "keywords": [
+    "jenkins",
+    "ci",
+    "cd"
+  ],
+  "author": "",
+  "license": "ISC"
+}
